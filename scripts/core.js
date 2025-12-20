@@ -84,15 +84,19 @@ function buildNavbar() {
     const { username, role, isGuest } = constants.USER_CONFIGS.snapshot;
     const isAdmin = role === "admin";
     const isModerator = role === "moderator";
-
-    // little check to see
+    let  nav_url_base = false;
+    
+    // little check to see if navbar is in putdata.html file
+    if(location.href.split('/').at(-1) == "putdata.html") {
+        nav_url_base = true;
+    }
 
     return `
         <div class="nav-left">
             <a class="nav-brand">Vaad</a>
 
-            <a href="../index.html" class="nav-link">Forums</a>
-            <a href="./forum.html?forumId=0" class="nav-link">Site News</a>
+            <a href="${(nav_url_base)?"../":""}../index.html" class="nav-link">Forums</a>
+            <a href="${(nav_url_base)?"../../views":"."}/forum.html?forumId=0" class="nav-link">Site News</a>
         </div>
 
         <div class="nav-right">
@@ -101,17 +105,17 @@ function buildNavbar() {
                 <span class="nav-caret">▾</span>
 
                 <div class="nav-dropdown">
-                    <a href="./profile.html">Profile</a>
-                    ${!isGuest ? `<a href="./myThreads.html">My Activity</a>` : ""}
+                    <a href="${(nav_url_base)?"../../views":"."}/profile.html">Profile</a>
+                    ${!isGuest ? `<a href="${(nav_url_base)?"../../views":"."}/myThreads.html">My Activity</a>` : ""}
 
                     ${(isAdmin)
-                        ? `<a href="../assets/siteadmin/putdata.html">Admin Panel</a>`
+                        ? `<a href="${(nav_url_base)?"./putdata.html":"../assets/siteadmin/putdata.html"}">Admin Panel</a>`
                         : ""
                     }
                     ${isGuest
                         ? `
-                            <a href="./login.html">Login </a>
-                            <a href="./signup.html">Signup</a>
+                            <a href="${(nav_url_base)?"../../views":"."}/login.html">Login </a>
+                            <a href="${(nav_url_base)?"../../views":"."}/signup.html">Signup</a>
                         `
                         : `<a href="#" id="logoutBtn">Logout</a>`
                     }
