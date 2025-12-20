@@ -55,11 +55,11 @@ async function main() {
 
          <div class="auth-callout">
              <h3 class="auth-callout-title">
-                 You must be logged in to view your threads
+                 You must be logged in to view your Profile
              </h3>
  
              <p class="auth-callout-text">
-                 Create an account or log in to manage your discussions and posts.
+                 Create an account or log in to view your profile and manage your discussions and posts.
              </p>
  
              <div class="auth-callout-actions">
