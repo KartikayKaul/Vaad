@@ -54,8 +54,11 @@ function init() {
 
         try {
             await loginUser({ username, password, remember});
-
-            window.location.href = "/index.html";
+            let start = "";
+            if(location.href.includes("github.io")) {
+                start = "/Vaad";
+            }
+            window.location.href = start +"/index.html";
         } catch (err) {
             errorMsg.textContent = err.message || "Login failed";
         }
