@@ -85,11 +85,13 @@ function buildNavbar() {
     const isAdmin = role === "admin";
     const isModerator = role === "moderator";
 
+    // little check to see
+
     return `
         <div class="nav-left">
             <a class="nav-brand">Vaad</a>
 
-            <a href="./index.html" class="nav-link">Forums</a>
+            <a href="../index.html" class="nav-link">Forums</a>
             <a href="./forum.html?forumId=0" class="nav-link">Site News</a>
         </div>
 
