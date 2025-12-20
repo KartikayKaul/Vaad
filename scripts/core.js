@@ -101,8 +101,8 @@ function buildNavbar() {
                 <span class="nav-caret">▾</span>
 
                 <div class="nav-dropdown">
-                    <a href="/views/profile.html">Profile</a>
-                    ${!isGuest ? `<a href="./views/myThreads.html">My Activity</a>` : ""}
+                    <a href="./profile.html">Profile</a>
+                    ${!isGuest ? `<a href="./myThreads.html">My Activity</a>` : ""}
 
                     ${(isAdmin)
                         ? `<a href="../assets/siteadmin/putdata.html">Admin Panel</a>`
@@ -110,8 +110,8 @@ function buildNavbar() {
                     }
                     ${isGuest
                         ? `
-                            <a href="./views/login.html">Login </a>
-                            <a href="./views/signup.html">Signup</a>
+                            <a href="./login.html">Login </a>
+                            <a href="./signup.html">Signup</a>
                         `
                         : `<a href="#" id="logoutBtn">Logout</a>`
                     }
