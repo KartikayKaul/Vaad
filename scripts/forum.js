@@ -331,8 +331,8 @@ async function reloadThreadList() {
         aLink.dataset.threadId = val.id;
 
         aLink.addEventListener("click", async () => {
-            await loadThread(val.id);
             showThreadView(val.id);
+            await loadThread(val.id);
         });
 
         threadTitle.append(aLink);
