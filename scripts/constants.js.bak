@@ -39,7 +39,7 @@ async function bootStrapApp() {
 }
 
 const constants = {
-    SERVER_URI: "https://vaad-backend.onrender.com",
+    SERVER_URI: "http://localhost:3000",
     _total_forum_cache: null,
     TOTAL_FORUM: async function() {
         if(this._total_forum_cache !== null) {
