@@ -1,0 +1,32 @@
+/**
+ * parsePostContent(raw)
+ *
+ * Supported formatting guide:
+ *
+ * TEXT STYLES
+ *  - *bold* or **bold**
+ *  - _italic_ or __italic__
+ *  - ~strikethrough~
+ *
+ * LINKS
+ *  - [[https://example.com]]
+ *  - [[https://example.com | link text]]
+ *
+ * USER MENTIONS
+ *  - {{username}}  → links to profile
+ *
+ * EMOJIS
+ *  - { :) }  → 🙂
+ *  - { :( }  → 🙁
+ *  - { :D }  → 😄
+ *  - { ;) }  → 😉
+ *  - { :P }  → 😛
+ *  - { <3 }  → ❤️
+ *
+ * REPLIES
+ *  - >>>username[post:123] → scroll link to post #123
+ *
+ * ESCAPING (disable formatting)
+ *  - \* \_ \~ \{ \} \[ \]
+ *    Example: \*not bold\*
+ */

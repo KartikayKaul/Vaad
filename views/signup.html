@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" href="../styles/root.css" />
+    <link rel="stylesheet" href="../styles/navbar.css" />
+    <link rel="stylesheet" href="../styles/login.css" />
+</head>
+<body>
+    <nav class="navbar"></nav>
+
+    <main class="auth-container">
+        <h2>Create Account</h2>
+
+        <form id="signupForm">
+            <label>
+                Username
+                <input type="text" id="username"  />
+            </label>
+
+            <label>
+                Email
+                <input type="email" id="email"  />
+            </label>
+
+            <label>
+                Password
+                <input type="password" id="password"  />
+            </label>
+
+            <label>
+                Confirm Password
+                <input type="password" id="confirmPassword"  />
+            </label>
+
+            <label class="remember">
+                <input type="checkbox" id="rememberMe" />
+                <span>Remember this device</span>
+            </label>
+
+
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <p class="error" id="errorMsg"></p>
+
+        <p class="hint">
+            Already have an account?
+            <a href="/views/login.html">Login</a>
+        </p>
+    </main>
+
+    <script type="module" src="../scripts/signup.js"></script>
+</body>
+</html>

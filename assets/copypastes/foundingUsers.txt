@@ -1,0 +1,71 @@
+{
+"user": [
+    {
+      "id": 1,
+      "username": "adminmasterkarry",
+      "email": "kartikaykaul13@gmail.com",
+      "passwordHash": "$papi$admin$karry",
+       "role": "admin",
+      "createdAt": "2025-01-01T10:00:00Z",
+      "authToken": null,
+      "authTokenExpiresAt": null
+    },
+    {
+      "id": 2,
+      "username": "skyline",
+      "email": "skyline@example.com",
+      "passwordHash": "$2a$10$skyline","role": "user",
+      "createdAt": "2025-01-02T14:22:18Z",
+      "authToken": null,
+      "authTokenExpiresAt": null
+    },
+    {
+      "id": 3,
+      "username": "quantumflux",
+      "email": "quantumflux@example.com",
+      "passwordHash": "$2a$10$quantumflux",
+      "role": "moderator",
+      "createdAt": "2025-01-03T09:03:41Z",
+      "authToken": null,
+      "authTokenExpiresAt": null
+    },
+    {
+      "id": 4,
+      "username": "ironbyte",
+      "email": "ironbyte@example.com",
+      "passwordHash": "$2a$10$ironbyte",
+      "role": "user",
+      "createdAt": "2025-01-04T12:15:00Z",
+      "authToken": null,
+      "authTokenExpiresAt": null
+    },
+    {
+      "id": 5,
+      "username": "frostpeak",
+      "email": "frostpeak@example.com",
+      "passwordHash": "$2a$10$frostpeak",
+      "role": "user",
+      "createdAt": "2025-01-05T07:30:12Z",
+      "authToken": null,
+      "authTokenExpiresAt": null
+    },
+    {
+      "id": 6,
+      "username": "papi289",
+      "email": "papi289@gmail.com",
+      "passwordHash": "hashedpapi",
+      "role": "user",
+      "createdAt": "2025-12-05T07:30:12Z",
+      "authToken": null,
+      "authTokenExpiresAt": null
+    },
+    {
+      "id": 7,
+      "username": "bdfl4vaad",
+      "email": "privatekartikay@gmail.com",
+      "passwordHash": "bdfllovesvaad",
+      "role": "admin",
+      "createdAt": "
+    }
+  ]
+}

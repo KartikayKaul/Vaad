@@ -1,0 +1,231 @@
+/* ===========================
+   GLOBAL RESET / SAFETY
+=========================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+
+
+/* ===========================
+   MAIN PAGE CONTAINER
+=========================== */
+.my-threads-page {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* ===========================
+   PAGE HEADINGS
+=========================== */
+.my-threads-page h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #2b2b2b;
+}
+
+.my-threads-page h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* ===========================
+   SECTIONS
+=========================== */
+section {
+    margin-bottom: 2.5rem;
+}
+
+/* ===========================
+   THREADS / POSTS LISTS
+=========================== */
+.my-threads-list ul,
+.my-posts-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.my-threads-list li,
+.my-posts-list li {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    transition: all 0.2s ease-in-out;
+}
+
+.my-threads-list li:hover,
+.my-posts-list li:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.my-threads-list li a,
+.my-posts-list li a {
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.my-threads-list li a:hover,
+.my-posts-list li a:hover {
+    text-decoration: underline;
+}
+
+.my-threads-list li p,
+.my-posts-list li p {
+    margin: 0.3rem 0 0 0;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+/* ===========================
+   LOAD MORE BUTTONS
+=========================== */
+.load-more-threads,
+.load-more-posts {
+    display: block;
+    width: max-content;
+    padding: 0.5rem 1.2rem;
+    margin: 0.5rem auto 0 auto;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #fff;
+    background-color: #1976d2;
+    border: 1px solid #1976d2;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.load-more-threads:hover,
+.load-more-posts:hover {
+    background-color: #155a9c;
+    border-color: #155a9c;
+}
+
+.load-more-threads:active,
+.load-more-posts:active {
+    transform: translateY(1px);
+}
+
+/* ===========================
+   EMPTY STATE
+=========================== */
+.my-threads-list p,
+.my-posts-list p {
+    font-style: italic;
+    color: #777;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* ===========================
+   HORIZONTAL RULE
+=========================== */
+hr {
+    border: none;
+    height: 1px;
+    background-color: #ccc;
+    margin: 2rem 0;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 600px) {
+    .my-threads-page {
+        padding: 0 1rem;
+    }
+
+    .load-more-threads,
+    .load-more-posts {
+        width: 60%;
+    }
+}
+
+li {
+    cursor: pointer;
+}
+
+/* ===========================
+   Auth Callout (Guest View)
+   =========================== */
+
+.auth-callout {
+  max-width: 720px;
+  margin: 96px auto 0; /* clears sticky navbar */
+  padding: 24px 28px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 6px solid var(--primary-blue, #2563eb);
+
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+
+  text-align: center;
+}
+
+/* Title */
+.auth-callout-title {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Supporting text */
+.auth-callout-text {
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+/* CTA container */
+.auth-callout-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+/* ===========================
+   Buttons (Vaad style)
+   =========================== */
+
+.auth-callout .btn {
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+/* Primary button */
+.auth-callout .btn-primary {
+  background-color: var(--primary-blue, #2563eb);
+  color: #ffffff;
+}
+
+.auth-callout .btn-primary:hover {
+  background-color: #1e4ed8;
+}
+
+/* Secondary button */
+.auth-callout .btn-secondary {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+}
+
+.auth-callout .btn-secondary:hover {
+  background-color: #e5e7eb;
+}

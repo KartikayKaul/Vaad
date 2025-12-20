@@ -1,0 +1,88 @@
+.forum-layout {
+  display: flex;
+  gap: 1rem;
+}
+
+.forum-view {
+  flex-direction: column;
+}
+
+.thread-view {
+  flex-direction: row;
+}
+
+.thread-view .thread-list-container {
+  width: 300px;
+  border-right: 1px solid #444;
+}
+
+.thread-container {
+  width: 50%;
+}
+
+.thread-meta, .post-meta {
+    font-size: 0.7rem;
+    text-align: right;
+}
+
+/* CSS for role-based names*/
+.admin-role {
+    background-color: goldenrod;
+    color: white;
+}
+
+.moderator-role {
+    background-color: cadetblue;
+    color: white;
+}
+
+.guest-role {
+  color: navy;
+}
+
+.small-message-font {
+  font-size: 14px;
+  font-style: italic;
+}
+
+.post-highlight {
+    background: #847c5a66;
+    border: 1px solid #c9b458;
+    transition: background 0.3s ease;
+}
+
+.post-highlight {
+    background: #5a5a5a;
+    border: 1px solid #aaa;
+}
+
+blockquote {
+    border-left: 4px solid #888;
+    padding-left: 10px;
+    margin: 8px 0;
+    color: #ccc;
+}
+
+code {
+    background: #2e2e2e;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+pre {
+    background: #2e2e2e;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.spoiler {
+    background: #444;
+    color: transparent;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0 4px;
+}
+.spoiler:hover {
+    color: white;
+}

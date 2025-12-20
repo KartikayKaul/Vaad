@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siteadmin - Vaad</title>
+    <link rel="stylesheet" href="../../styles/root.css" />
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <style>
+        /* form {
+            height: auto;
+            width: 80%;
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        form input[type="submit"] {
+            width: 50%;
+            margin: auto;
+        }
+
+        .pd-msgBox {
+            margin: 0;
+            font-size: 12px;
+            color: green;
+            padding: 0 8px;
+        } */
+
+        /* ===============================
+            SITE ADMIN – PUT DATA PAGE
+            Scoped styles (safe)
+        ================================ */
+
+        /* ======================================
+            SITE ADMIN – PUT DATA PAGE (Scoped)
+            Uses existing site theme
+        ====================================== */
+
+        /* Headings spacing */
+        h2, h3, h4 {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Divider */
+        hr {
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        /* ===============================
+        FORMS (shared)
+        ================================ */
+        form {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+
+        /* Labels */
+        form label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Inputs / selects / textarea */
+        form input,
+        form select,
+        form textarea {
+            padding: 8px 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
+
+        /* Textarea for JSON */
+        textarea[name="jsonvalue"] {
+            min-height: 140px;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        /* Disabled fields */
+        form input:disabled,
+        form textarea:disabled,
+        form select:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ===============================
+        SUBMIT BUTTONS
+        ================================ */
+        form input[type="submit"] {
+            width: 50%;
+            margin: 10px auto 0 auto;
+            padding: 8px 0;
+
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* ===============================
+        MESSAGE BOXES
+        ================================ */
+        .pd-msgBox {
+            margin: 0;
+            font-size: 13px;
+            padding: 6px 8px;
+        }
+
+        .pd-top-msgBox {
+            max-width: 900px;
+            margin: 10px auto;
+            font-size: 14px;
+        }
+
+        /* ===============================
+        ROLE FORM SPECIFIC
+        ================================ */
+        #pd-updateUserRole select {
+            width: 100%;
+        }
+
+        /* ===============================
+        RESPONSIVE
+        ================================ */
+        @media (max-width: 768px) {
+            form {
+                padding: 16px;
+            }
+
+            form input[type="submit"] {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar"></nav>
+    <h2> Site Admin - Data Updation Page</h2>
+    <hr/>
+    <h3 class="pd-top-msgBox" style="display: hidden;"></h3>
+    <h4>Add/Update Endpoint Data</h4>
+    <form id="updateEndpointData">
+        <label for="endpointName">Select Endpoint Name:</label><select id="endpointName" name="endpointName" required>
+            <option value="user" default>user</option>
+            <option value="forum">forum</option>
+            <option value="thread">thread</option>
+            <option value="posts">posts</option>
+        </select>
+        <input type="text" name="eptObjId" placeholder="Enter object id:" required/>
+        <label for="opName">Select operation:</label><select id="opName" name="opName" required>
+            <option style="color:grey" value="" disabled selected>--Pick operation--</option>
+            <option value="add">Add</option>
+            <option value="delete">Delete</option>
+            <option value="update">Update</option>
+        </select>
+
+        <textarea name="jsonvalue" placeholder="Enter json object" required></textarea>
+        <input type="submit" value="update Endpoint Data"/>
+    </form>
+
+    <hr/>
+    <br/>
+    <h4>Change A User's Role</h4>
+    <form id="pd-updateUserRole">
+        <p class="pd-msgBox"></p>
+        <label for="pd-select-user">Pick User: </label>
+        <select name="pd-select-user" id="pd-select-user">
+            <option value="" disabled selected>-- Pick a User --</option>
+        </select>
+        <label for="pd-select-role">Change their Role:</label>
+        <select name="pd-select-role" id="pd-select-role">
+            <option value="" disabled selected>-- Pick the role --</option>
+            <option value="admin">admin</option>
+            <option value="moderator">Moderator</option>
+            <option value="user">User</option>
+            <option value="temp" disabled>Temporary user</option>
+        </select>
+        <input type="submit" value="update User Role"/>
+    </form>
+
+
+
+<!-- site admin script -->
+<script type="module">
+    import {constants} from '../../scripts/constants.js';
+    import { getEndpointData, buildNavbar } from '../../scripts/core.js';
+    import { logoutUser } from "../../scripts/authentication.js"; 
+
+    // ADDING NAVBAR
+    document.querySelector(".navbar").innerHTML = buildNavbar();
+    const logoutBtn = document.querySelector("#logoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await logoutUser();
+        });
+    }
+
+    const userRole = constants.USER_CONFIGS.snapshot.role;
+
+    if( userRole == "admin") {
+        const eptForm = document.querySelector("#updateEndpointData");
+        const opNameSelect = document.querySelector("#opName");
+        const objIdInput = document.querySelector("#updateEndpointData input[name='eptObjId']");
+        const jsonTextarea = document.querySelector("textarea[name='jsonvalue']");
+        const endpointSelect = document.querySelector("#endpointName");
+
+        // disabling the textarea for delete operation selection
+        opNameSelect.addEventListener("change", () => {
+            const op = opNameSelect.value;
+
+            if(opNameSelect.value === "delete") {
+                jsonTextarea.disabled = true;
+                jsonTextarea.placeholder = "Delete operation selected";
+
+                objIdInput.disabled = false;
+            }  else if (op === "add") {
+                jsonTextarea.disabled = false;
+                jsonTextarea.placeholder = "Enter JSON object";
+
+                objIdInput.disabled = true;    //auto-generate id
+                objIdInput.value = "";
+            }
+            else {
+                jsonTextarea.disabled = false;
+                jsonTextarea.placeholder = "Enter JSON object";
+
+                objIdInput.disabled = false;
+            }
+        });
+
+        eptForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const endpoint = endpointSelect.value;
+            const id = objIdInput?.value?.trim() || undefined;
+            const op = opNameSelect.value; 
+
+            let url = `${constants.SERVER_URI}/${endpoint}`;
+            let method = "";
+            let body = null;
+
+            // Add operation
+            if(op === "add") {
+                method = "POST";
+
+                try {
+                    console.log(jsonTextarea.value);
+                    body = JSON.parse(jsonTextarea.value);
+                } catch(err) {
+                    console.error("Invalid JSON");
+                    return;
+                }
+            }
+
+            // Update operation
+            if(op === "update") {
+                method = "PATCH";
+
+                try {
+                    body = JSON.parse(jsonTextarea.value);
+                } catch (err) {
+                    console.error("Invalid JSON");
+                    return;
+                }
+
+                url += `/${id}`;            
+            }
+
+            // delete operation
+            if(op === "delete") {
+                method = "DELETE";
+                url += `/${id}`;
+            }
+
+            //fetching
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: body ? JSON.stringify(body) : null
+                });
+
+                if(!res.ok) throw new Error("Failed request");
+
+                const result = await res.json().catch(() => "Deleted successfully");
+                console.info(`Success: ${JSON.stringify(result, null, 2)}`);
+            } catch(err) {
+                console.error("Error: " + err.message);
+            }
+            
+        });
+
+
+        // ROLE PICKER LOGIC
+        const rcForm = document.querySelector("#pd-updateUserRole");
+        const userSelect = rcForm.querySelector("select#pd-select-user");
+        const rcMsgBox = rcForm.querySelector("p.pd-msgBox");
+
+        // might need to find an optimal way to get all users for large-scale numbers
+        const allUsersList = await getEndpointData(
+            'user',
+            false,
+            constants.SERVER_URI
+        );
+        allUsersList.forEach((val) => {
+            let newOption = document.createElement("option");
+            newOption.value = val.username;
+            newOption.setAttribute("user-id", val.id);
+            newOption.textContent = `${val.username}`;
+
+            userSelect.append(newOption);
+        });
+
+        rcForm.addEventListener("submit", async (event) =>{
+            event.preventDefault();
+            let tgForm = event.target;
+            const uss = tgForm.querySelector("select#pd-select-user");
+            const rcs = tgForm.querySelector("select#pd-select-role");
+
+            if(uss.value == "") {
+                rcMsgBox.style.color = "red";
+                rcMsgBox.textContent = `you need to pick a user.`;
+                return;
+            }
+            if(rcs.value == "") {
+                rcMsgBox.style.color = "red";
+                rcMsgBox.textContent = `You need to pick a user role.`;
+                return;
+            }
+
+            const optSelected = uss.options[uss.selectedIndex];
+            const userId = optSelected.getAttribute("user-id");
+            const newRole = rcs.value;
+
+            if(!userId) {
+                rcMsgBox.textContent = "Invalid user selected.";
+                rcMsgBox.style.color = "red";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${constants.SERVER_URI}/user/${userId}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        role: newRole
+                    })
+                });
+
+                if (!res.ok) {
+                    throw new Error("Failed to update user role");
+                }
+
+                const updatedUser = await res.json();
+                rcMsgBox.style.color = "green";
+                rcMsgBox.textContent = `Role updated successfully for ${updatedUser.username}`;
+            } catch (err) {
+                rcMsgBox.style.color = "red";
+                rcMsgBox.textContent = err.message;
+            }
+        });
+    } else {
+        let msgBox = document.querySelector(".pd-top-msgBox");
+        msgBox.style.display = "block";
+        msgBox.style.color = "red";
+        msgBox.textContent = "You are not an admin. Best GTF outta here.";
+    }
+</script>
+</body>
+</html>

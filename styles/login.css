@@ -1,0 +1,159 @@
+/* ===========================
+   GLOBAL RESET / SAFETY
+=========================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+
+
+/* ===========================
+   AUTH CONTAINER (LOGIN / SIGNUP)
+=========================== */
+.auth-container {
+    max-width: 400px;
+    margin: 5rem auto 3rem auto; /* vertical spacing from top */
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.auth-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #2b2b2b;
+}
+
+/* ===========================
+   FORM ELEMENTS
+=========================== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+form label {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    font-weight: 500;
+    color: #333;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    outline: none;
+    border-color: #7b85ff;
+    box-shadow: 0 0 4px rgba(123, 133, 255, 0.4);
+}
+
+/* ===========================
+   REMEMBER ME / REMEMBER DEVICE
+=========================== */
+.remember {
+    display: flex;               /* inline-flex to keep checkbox + text on same line */
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;                 /* space between checkbox and label */
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.remember input[type="checkbox"] {
+    margin: 0;                   /* remove default spacing */
+}
+
+/* ===========================
+   BUTTONS (MATCH FORUM THEME)
+=========================== */
+form button[type="submit"],
+button,
+input[type="submit"] {
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #1976d2;
+    background-color: #1976d2;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+form button[type="submit"]:hover,
+button:hover,
+input[type="submit"]:hover {
+    background-color: #155a9c;
+    border-color: #155a9c;
+}
+
+form button[type="submit"]:active,
+button:active,
+input[type="submit"]:active {
+    transform: translateY(1px);
+}
+
+form button[type="submit"]:disabled,
+button:disabled,
+input[type="submit"]:disabled {
+    background-color: #cfd4da;
+    border-color: #cfd4da;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   ERROR MESSAGE
+=========================== */
+#errorMsg {
+    color: #d9534f;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    min-height: 1.2rem;
+}
+
+/* ===========================
+   HINT / SWITCH LINK
+=========================== */
+.hint {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.hint a {
+    color: #1521a8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.hint a:hover {
+    text-decoration: underline;
+    color: #9ca2e6;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 500px) {
+    .auth-container {
+        margin: 3rem 1rem;
+        padding: 1.5rem;
+    }
+}

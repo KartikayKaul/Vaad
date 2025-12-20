@@ -1,0 +1,312 @@
+/* =====================================================
+   GLOBAL RESET / SAFETY
+===================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f6f7f9;
+  color: #222;
+}
+
+/* =====================================================
+   WRAPPER FOR FORUM CONTENT (EXCLUDES NAVBAR)
+===================================================== */
+.forum-wrapper {
+  padding: 0 8vw; /* SIGNIFICANT LEFT / RIGHT MARGIN */
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+.forum-layout {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.forum-view {
+  flex-direction: column;
+}
+
+.thread-view {
+  flex-direction: row;
+}
+
+/* LEFT SIDEBAR */
+.thread-view .thread-list-container {
+  flex: 0 0 300px;
+  padding-right: 1rem;
+  border-right: 1px solid #ddd;
+}
+
+/* RIGHT CONTENT */
+.thread-container {
+  flex: 1;
+  min-width: 0;
+}
+
+/* =====================================================
+   FORUM HEADER
+===================================================== */
+.forum-header h2 {
+  margin-bottom: 0.3rem;
+}
+
+.forum-header p {
+  margin-top: 0;
+  color: #555;
+}
+
+/* =====================================================
+   THREAD / POST STRUCTURE
+===================================================== */
+.thread-header h2 {
+  margin-bottom: 0.2rem;
+}
+
+.thread-meta,
+.post-meta {
+  font-size: 0.75rem;
+  text-align: right;
+  color: #666;
+}
+
+.post {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 1rem;
+}
+
+/* =====================================================
+   THREAD LIST
+===================================================== */
+.thread-list-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.thread-list-container li {
+  padding: 8px 6px;
+  border-bottom: 1px solid #eee;
+}
+
+.thread-list-container li:hover {
+  background: #f0f2f5;
+}
+
+.threadTitle {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.threadTitle a {
+  text-decoration: none;
+  color: #1976d2;
+}
+
+.threadTitle a:hover {
+  text-decoration: underline;
+}
+
+.authroname {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* =====================================================
+   ROLE STYLES
+===================================================== */
+.admin-role {
+  background: #f5c542;
+  color: #000;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.moderator-role {
+  background: #4da6a6;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.guest-role {
+  color: #4c6ef5;
+  font-size: 0.7rem;
+}
+
+.small-message-font {
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* =====================================================
+   FORMS / INPUTS / TEXTAREAS
+===================================================== */
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 1px rgba(25, 118, 210, 0.2);
+}
+
+/* =====================================================
+   BUTTONS (INCLUDING CREATE THREAD)
+===================================================== */
+button,
+input[type="submit"] {
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid #1976d2;
+  background: #1976d2;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background: #155a9c;
+}
+
+button:disabled,
+input[type="submit"]:disabled {
+  background: #cfd4da;
+  border-color: #cfd4da;
+  cursor: not-allowed;
+}
+
+/* Reply button */
+.reply-btn {
+  margin-left: 6px;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+}
+
+/* =====================================================
+   CREATE THREAD / POST BOXES
+===================================================== */
+.create-thread-box,
+.create-post-box {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.create-thread-box h3,
+.create-post-box h3 {
+  margin-top: 0;
+}
+
+/* =====================================================
+   POST CONTENT FORMATTING
+===================================================== */
+blockquote {
+  border-left: 4px solid #1976d2;
+  background: #f1f5fb;
+  padding: 8px 12px;
+  margin: 10px 0;
+  color: #333;
+  font-style: italic;
+}
+
+code {
+  background: #f0f0f0;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+pre {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+mark {
+  background: #fff3bf;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.spoiler {
+  background: #ccc;
+  color: transparent;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0 4px;
+}
+
+.spoiler:hover {
+  color: #000;
+}
+
+.reply-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.post-highlight {
+  background: #e3f2fd;
+  border-color: #1976d2;
+  transition: background 0.3s ease;
+}
+
+/* =====================================================
+   NAV HELPERS
+===================================================== */
+.back-to-forum {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.back-to-forum:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
+   UTILS
+===================================================== */
+.hidden {
+  display: none;
+}

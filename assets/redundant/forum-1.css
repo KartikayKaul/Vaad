@@ -1,0 +1,41 @@
+.forum-layout {
+  display: flex;
+  gap: 1rem;
+}
+
+.forum-view {
+  flex-direction: column;
+}
+
+.thread-view {
+  flex-direction: row;
+}
+
+.thread-view .thread-list-container {
+  width: 300px;
+  border-right: 1px solid #444;
+}
+
+.thread-container {
+  width: 50%;
+}
+
+.thread-meta, .post-meta {
+    font-size: 0.7rem;
+    text-align: right;
+}
+
+/* CSS for role-based names*/
+.admin-role {
+    background-color: goldenrod;
+    color: white;
+}
+
+.moderator-role {
+    background-color: cadetblue;
+    color: white;
+}
+
+.guest-role {
+  color: navy;
+}

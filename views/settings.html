@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Settings</title>
+
+    <link rel="stylesheet" href="../styles/root.css" />
+    <link rel="stylesheet" href="../styles/navbar.css" />
+    <link rel="stylesheet" href="../styles/settings.css" />
+</head>
+<body>
+
+<nav class="navbar"></nav>
+
+<main class="settings-container">
+    <h2>Account Settings</h2>
+
+    <!-- PROFILE SECTION -->
+    <p class="success" id="profileSuccess"></p>
+    <section class="settings-section">
+        <h3>Profile Information</h3>
+
+        <label>
+            Display Name
+            <input type="text" id="displayName" />
+        </label>
+
+        <label>
+            Bio
+            <textarea id="bio"></textarea>
+        </label>
+
+        <label>
+            Location
+            <input type="text" id="location" />
+        </label>
+
+        <label>
+            Website
+            <input type="url" id="website" />
+        </label>
+
+        <label>
+            Interests (comma separated)
+            <input type="text" id="interests" />
+        </label>
+
+        <button id="saveProfileBtn">Save Profile</button>
+        
+    </section>
+
+    <!-- PRIVACY SECTION -->
+    <section class="settings-section">
+        <h3>Privacy</h3>
+
+        <label class="checkbox">
+            <input type="checkbox" id="publicProfile" />
+            Public profile
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" id="showEmail" />
+            Show email
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" id="showLocation" />
+            Show location
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" id="showInterests" />
+            Show interests
+        </label>
+
+        <button id="savePrivacyBtn">Save Privacy</button>
+    </section>
+
+    <!-- SECURITY SECTION -->
+    <section class="settings-section danger">
+        <h3>Security</h3>
+
+        <label>
+            Old Password
+            <input type="password" id="oldPassword" />
+        </label>
+
+        <label>
+            New Password
+            <input type="password" id="newPassword" />
+        </label>
+
+        <label>
+            Confirm New Password
+            <input type="password" id="confirmNewPassword" />
+        </label>
+
+        <button id="resetPasswordBtn">Reset Password</button>
+        <p class="error" id="passwordError"></p>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section class="settings-section">
+        <button id="logoutBtn">Logout</button>
+    </section>
+
+</main>
+
+<script type="module" src="../scripts/settings.js"></script>
+</body>
+</html>

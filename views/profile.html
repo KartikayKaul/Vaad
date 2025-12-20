@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👤 Vaad Profile</title>
+    <link href="../styles/root.css" rel="stylesheet" />
+    <link href="../styles/navbar.css" rel="stylesheet" />
+    <link href="../styles/profile.css" rel="stylesheet" />
+    
+</head>
+<body>
+  <nav class="navbar"></nav>
+
+    <main class="profile-container">
+        <h2 id="profileHeading">Profile</h2>
+
+        <div class="profile-card">
+            <div class="row">
+                <span class="label">Username</span>
+                <span id="profileUsername"></span>
+            </div>
+
+            <div class="row">
+                <span class="label">Email</span>
+                <span id="profileEmail"></span>
+            </div>
+
+            <div class="row">
+                <span class="label">Role</span>
+                <span id="profileRole"></span>
+            </div>
+
+            <div class="row">
+                <span class="label">Joined</span>
+                <span id="profileCreatedAt"></span>
+            </div>
+        </div>
+        <br/><br/>
+        <hr/>
+        <br/><br/>
+        <div id="profileActions" class="profile-actions hidden">
+            <a href="/views/settings.html" class="btn">Edit Profile</a>
+        </div>
+    </main>
+
+    <script type="module" src="../scripts/profile.js"></script>
+</body>
+</html>
