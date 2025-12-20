@@ -83,7 +83,12 @@ body {
   border-radius: 6px;
   padding: 10px 12px;
   margin-bottom: 1rem;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
+
+
 
 /* =====================================================
    THREAD LIST
@@ -309,4 +314,74 @@ mark {
 ===================================================== */
 .hidden {
   display: none;
+}
+
+
+
+/* =====================================================
+   MOBILE VIEW (TABLETS & PHONES)
+===================================================== */
+@media (max-width: 768px) {
+
+  /* Reduce aggressive horizontal padding */
+  .forum-wrapper {
+    padding: 0 1rem;
+  }
+
+  /* Stack layout instead of side-by-side */
+  .forum-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Thread view: force vertical flow */
+  .thread-view {
+    flex-direction: column;
+  }
+
+  /* Thread list moves to top */
+  .thread-view .thread-list-container {
+    flex: none;
+    width: 100%;
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+  }
+
+  /* Thread content below list */
+  .thread-container {
+    width: 100%;
+  }
+
+  /* Make thread titles slightly more touch-friendly */
+  .threadTitle {
+    font-size: 1.05rem;
+  }
+
+  /* Metadata alignment feels better on mobile */
+  .thread-meta,
+  .post-meta {
+    text-align: left;
+    margin-top: 4px;
+  }
+
+  /* Buttons span full width when needed */
+  button,
+  input[type="submit"] {
+    width: 100%;
+  }
+
+  /* Reply buttons stay compact */
+  .reply-btn {
+    width: auto;
+    float:right;
+  }
+}
+
+
+pre,
+code {
+  max-width: 100%;
+  overflow-x: auto;
 }
