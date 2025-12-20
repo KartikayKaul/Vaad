@@ -39,7 +39,12 @@ form.addEventListener("submit", async (e) => {
 
     try {
         await signupUser({username, email, password, remember});
-        location.href = "/index.html"; //redirecting after successful login // we can change it later to profile.html
+        
+        let start = "";
+        if(location.href.includes("github.io")) {
+            start = "/Vaad";
+        }
+        location.href = start + "/index.html"; //redirecting after successful login // we can change it later to profile.html
     } catch(err) {
         errorMsg.textContent = err.message || "Signup failed";
     }
