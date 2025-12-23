@@ -20,7 +20,7 @@ async function getEndpointData(endpoint,
                             ) 
 {
     let req_string = (pagination)?`${SERVER_URI}/${endpoint}?_page=${page}&_limit=${limit}`: `${SERVER_URI}/${endpoint}`;
-    console.log(req_string);
+    
     try {
         let aha = await fetch(req_string);
         // console.log(aha);

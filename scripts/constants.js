@@ -37,7 +37,6 @@ async function bootStrapApp() {
         constants.SERVER_URI
     );
     constants.__MODS__ = USERS.map(x => ({id: x.id, username: x.username, role: x.role}));
-    console.log(constants.__MODS__);
     await restoreSessionFromToken();
 }
 
