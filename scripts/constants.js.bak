@@ -7,36 +7,8 @@
 */
 
 import {USER_CONFIG} from "./userConfig.js";
+import {getEndpointData} from "./core.js";
 import { restoreSessionFromToken } from "./authentication.js";
-
-// function initializeUserConfigs() {
-//     let saved = sessionStorage.getItem("USER_CONFIGS");
-
-//     if(saved) {
-//         return JSON.parse(saved);     // <-- return saved session version
-//     }
-
-//     // first-time session creating new config
-//     const fresh = {
-//         username: generateGuestName(),
-//         userId: -1,
-//         isGuest: true,
-//         auth: {
-//             token: null,
-//             expiresAt: null
-//         },
-//         role: "guest",
-//         createdAt: Date.now(),
-//         lastActiveAt: Date.now()
-//     };
-
-//     sessionStorage.setItem("USER_CONFIGS", JSON.stringify(fresh));
-//     return fresh;
-// }
-
-async function bootStrapApp() {
-    await restoreSessionFromToken();
-}
 
 const constants = {
     SERVER_URI: "http://localhost:3000",
@@ -58,19 +30,16 @@ const constants = {
     bootStrapApp
 };
 
+async function bootStrapApp() {
+    const USERS = await getEndpointData(
+        `user?role=admin&role=moderator`,
+        false,
+        constants.SERVER_URI
+    );
+    constants.__MODS__ = USERS.map(x => ({id: x.id, username: x.username, role: x.role}));
+    console.log(constants.__MODS__);
+    await restoreSessionFromToken();
+}
+
+
 export {constants};
-
-
-// {
-//         "uname": `guest` + alphabets[Math.ceil(Math.random()*alphabets.length)] + new Date().getTime(),
-//         userId: null,
-//         isGuest: true,
-
-//         auth: {
-//             token: null,
-//             expiresAt: null
-//         },
-
-//         createdAt: Date.now(),
-//         lastActiveAt: Date.now()
-// }

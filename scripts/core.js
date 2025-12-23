@@ -68,9 +68,9 @@ function timeAgo(dateString) {
     const diff = (now - date)/1000; //in seconds
 
     if (diff < 60) return `${Math.floor(diff)} seconds ago`;
-    if (diff == 60) return `${Math.floor(diff)} minute ago`;
+    if (diff <= 60) return `${Math.floor(diff)} minute ago`;
     if (diff < 3600) return `${Math.floor(diff/60)} minutes ago`;
-    if (diff == 3600) return `${Math.floor(diff)} hour ago`;
+    if (diff <= 3600) return `${Math.floor(diff)} hour ago`;
     if (diff < 86400) return `${Math.floor(diff/3600)} hours ago`;
     if (diff < 172800) return `yesterday`;
     if (diff < 31536000) return `${Math.floor(diff/86400)} days ago`;

@@ -28,6 +28,141 @@ console.log(autoThreadId, autoPostId);
 /* ======================================================
    UTIL FUNCTIONS
 ====================================================== */
+function buildMetaSpawn(p, author) {
+    const isDeleted = p.deletionLog?.deleted;
+    const lastDeletion = p.deletionLog?.log?.[0];
+
+    if (!isDeleted || !lastDeletion) {
+    return `
+      Posted ${timeAgo(p.createdAt)} by ${author.username}
+      <span class="${author.role}-role">[${author.role}]</span>
+    `;
+  }
+
+  const isSelfDelete = lastDeletion.deletedBy;
+  const deleterRole = constants.__MODS__.filter(y => y.id == lastDeletion.deleterId)[0].role || "self";
+  const hasReason = isSelfDelete !== "self" && lastDeletion.reason;
+
+  return `
+    Deleted ${timeAgo(lastDeletion.deletedOn)} by ${(deleterRole == "self")?author.username:constants.__MODS__.filter(y => y.id == lastDeletion.deleterId)[0].username}
+    <span class="${deleterRole}-role">[${isSelfDelete || deleterRole}]</span>
+    ${
+      hasReason
+        ? `
+          <span
+            class="delete-reason-indicator"
+            title="${lastDeletion.reason.replace(/"/g, "&quot;")}">
+            ✉reason
+          </span>
+        `
+        : ""
+    }
+
+    <small><br/>[was created by ${author.username} around ${timeAgo(p.createdAt)}]</small>
+  `;
+}
+
+function injectDeleteUI(postNode, postId) {
+  // Prevent duplicate injection
+  if (postNode.querySelector(".delete-ui")) return;
+
+  const user = constants.USER_CONFIGS.snapshot;
+  const requiresReason = (user.role === "moderator" || user.role === "admin") &&
+                          user.username !== postNode.querySelector(".reply-btn").dataset.username;
+
+  const ui = document.createElement("div");
+  ui.className = "delete-ui";
+
+  ui.innerHTML = `
+    ${requiresReason ? `
+      <textarea
+        class="delete-reason"
+        placeholder="Deletion reason (required)"
+        rows="2"
+      ></textarea>
+    ` : ""}
+    <div class="delete-actions">
+      <button class="confirm-delete">Confirm</button>
+      <button class="cancel-delete">Cancel</button>
+      <p class="error"></p>
+    </div>
+  `;
+
+  postNode.append(ui);
+  setTimeout(() => ui.classList.add("show"), 10);
+
+  const errorBox = ui.querySelector(".error");
+
+  ui.querySelector(".cancel-delete").onclick = () => ui.remove();
+
+  ui.querySelector(".confirm-delete").onclick = async () => {
+    const reason = requiresReason
+      ? ui.querySelector(".delete-reason").value.trim()
+      : "Deleted by author";
+
+    if (requiresReason && !reason) {
+      errorBox.textContent = "Deletion reason is required.";
+      return;
+    }
+
+    await deletePost(postId, reason);
+  };
+}
+
+async function deletePost(postId, reason) {
+  
+  const user = constants.USER_CONFIGS.snapshot;
+
+  // fetch post
+  const postRes = await fetch(`${constants.SERVER_URI}/posts/${postId}`);
+  const post = await postRes.json();
+
+  if (!post || post.deletionLog?.deleted) {
+    alert("Post already deleted.");
+    return;
+  }
+
+  const deletedBy =
+    user.userId === post.authorId
+      ? "self"
+      : user.role === "admin"
+        ? "admin"
+        : "moderator";
+
+  const deletionEntry = {
+    deletedBy,
+    deleterId: user.userId,
+    deletedContent: post.content,
+    reason: deletedBy === "self" ? null : reason,
+    deletedOn: new Date().toISOString()
+  };
+
+  const updatedPost = {
+    ...post,
+    content: "<i>deleted</i>",
+    deletionLog: {
+      deleted: true,
+      log: [deletionEntry, ...(post.deletionLog?.log || [])]
+    }
+  };
+
+  await fetch(`${constants.SERVER_URI}/posts/${postId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedPost)
+  });
+
+  await reloadPosts(currentThreadId);
+}
+
+
+function canDeletePost(post) {
+  const user = constants.USER_CONFIGS.snapshot;
+  if (user.userId === -1 || user.isGuest) return false;
+  if (user.userId === post.authorId) return true;
+  if (user.role === "moderator" || user.role === "admin") return true;
+  return false;
+}
 
 function parsePostContent(raw) {
     if (!raw) return "";
@@ -377,22 +512,107 @@ async function reloadPosts(threadId) {
             role: "guest"
         };
 
+        const isDeleted = p.deletionLog?.deleted;
+        // const lastDeletion = p.deletionLog?.log?.[0];
         return `
           <div class="post" data-post-id="${p.id}" id="post-${p.id}">
-            <div class="post-content">${parsePostContent(p.content)}</div>
+            <div class="post-content">${isDeleted ? "<small><i>Deleted</i></small>" : parsePostContent(p.content)}</div>
             <p class="post-meta">
-                Posted ${timeAgo(p.createdAt)} by ${author.username}
-                <span class="${author.role}-role">[${author.role}]</span>
-                 <button title="reply to ${author.username}" class="reply-btn" data-post-id="${p.id}" data-username="${author.username}">Reply</button>
+                <span class="meta-spawn">
+                    ${buildMetaSpawn(p, author)}
+                </span>
+                
+
+                <span class="post-actions">
+                    ${
+                        !isDeleted
+                        ? `
+                            <button
+                            title="reply to ${author.username}"
+                            class="reply-btn"
+                            data-post-id="${p.id}"
+                            data-username="${author.username}">
+                            Reply
+                            </button>
+                        `
+                        : `
+                            <button
+                            class="reply-btn disabled"
+                            title="Post is deleted."
+                            disabled>
+                            Reply
+                            </button>
+                        `
+                    }
+
+                    ${
+                        !isDeleted && canDeletePost(p)
+                        ? `<button class="delete-btn" data-post-id="${p.id}" title="delete post">delete</button>`
+                        : ""
+                    }
+                </span>
+
             </p>
-            <hr/>
+            
           </div>
         `;
     }).join("");
 
     document.querySelector(".thread-posts").innerHTML = postsHTML;
+
+    // Add Undo buttons for deleted posts
     
-    // event delegated to
+    posts.forEach(p => {
+        const user = constants.USER_CONFIGS.snapshot;
+        const lastDeletion = p.deletionLog?.log?.[0];
+        if (!p.deletionLog?.deleted || !lastDeletion) return;
+
+        let canUndo = false;
+
+        if(!lastDeletion) {
+            canUndo = false;
+        } else if ( lastDeletion.deletedBy === "self") {
+            canUndo = lastDeletion.deleterId === user.userId;
+        } else if (lastDeletion.deleterId != user.userId ){
+            canUndo = false;
+        }
+        else {
+            canUndo = user.role === "moderator" || user.role === "admin";
+        }
+        if (!canUndo) return;
+
+        const postNode = document.querySelector(`#post-${p.id}`);
+        if (postNode.querySelector(".undo-delete-btn")) return;
+
+        const undoBtn = document.createElement("button");
+        undoBtn.textContent = "Undo";
+        undoBtn.classList.add("undo-delete-btn");
+
+        undoBtn.addEventListener("click", async () => {
+            const remainingLog = p.deletionLog.log.slice(1);
+            const restoredPost = {
+            ...p,
+            content: lastDeletion.deletedContent,
+            deletionLog: {
+                deleted: remainingLog.length > 0,
+                log: remainingLog
+            }
+            };
+
+            await fetch(`${constants.SERVER_URI}/posts/${p.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(restoredPost)
+            });
+
+            await reloadPosts(currentThreadId);
+        });
+
+        postNode.querySelector(".post-actions").appendChild(undoBtn);
+    });
+
+
+    // event delegation handler is added here
     const postsContainer = document.querySelector(".thread-posts");
     if (!postsContainer.dataset.listenerAdded) {
         postsContainer.addEventListener("click", (e) => {
@@ -404,6 +624,20 @@ async function reloadPosts(threadId) {
                 textarea.scrollIntoView({ behavior: "smooth", block: "center" });
                 textarea.value = `>>>${username}[post:${postId}]\n` + textarea.value;
             }
+
+            if (e.target.classList.contains("delete-btn")) {
+                const postId = e.target.dataset.postId;
+                const postNode = e.target.closest(".post");
+
+                let ui = postNode.querySelector(".delete-ui");
+                if (ui) {
+                    // toggle
+                    ui.classList.toggle("show");
+                } else {
+                    injectDeleteUI(postNode, postId);
+                }
+            }
+
         });
         postsContainer.dataset.listenerAdded = "true";
     }

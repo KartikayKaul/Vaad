@@ -29,4 +29,11 @@
  * ESCAPING (disable formatting)
  *  - \* \_ \~ \{ \} \[ \]
  *    Example: \*not bold\*
+ *
+ * CODE 
+ * -  ```[lang]python
+ *           def main():
+ *                  print("hello");
+ *    ```
+ *
  */

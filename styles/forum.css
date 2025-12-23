@@ -1,7 +1,9 @@
 /* =====================================================
-   GLOBAL RESET / SAFETY
+   GLOBAL RESET
 ===================================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -15,10 +17,20 @@ body {
 }
 
 /* =====================================================
-   WRAPPER FOR FORUM CONTENT (EXCLUDES NAVBAR)
+   LINK NORMALIZATION
+===================================================== */
+/* a {
+  color: inherit;
+}
+
+a:visited { color: inherit; }
+a:hover { color: inherit; } */
+a:active { color: cornflowerblue;}
+/* =====================================================
+   WRAPPER
 ===================================================== */
 .forum-wrapper {
-  padding: 0 8vw; /* SIGNIFICANT LEFT / RIGHT MARGIN */
+  padding: 0 8vw;
 }
 
 /* =====================================================
@@ -28,67 +40,151 @@ body {
   display: flex;
   gap: 1.5rem;
   width: 100%;
+  flex-wrap: wrap; /* allow wrapping on small screens */
 }
 
-.forum-view {
-  flex-direction: column;
-}
+.forum-view { flex-direction: column; }
+.thread-view { flex-direction: row; }
 
-.thread-view {
-  flex-direction: row;
-}
-
-/* LEFT SIDEBAR */
 .thread-view .thread-list-container {
   flex: 0 0 300px;
   padding-right: 1rem;
   border-right: 1px solid #ddd;
+  min-width: 200px;
 }
 
-/* RIGHT CONTENT */
-.thread-container {
-  flex: 1;
-  min-width: 0;
-}
+.thread-container { flex: 1; min-width: 0; }
 
 /* =====================================================
-   FORUM HEADER
+   HEADERS
 ===================================================== */
-.forum-header h2 {
-  margin-bottom: 0.3rem;
-}
-
-.forum-header p {
-  margin-top: 0;
-  color: #555;
-}
-
-/* =====================================================
-   THREAD / POST STRUCTURE
-===================================================== */
+.forum-header h2,
 .thread-header h2 {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
+.forum-header p { margin-top: 0; color: #555; }
+
+/* =====================================================
+   META
+===================================================== */
 .thread-meta,
 .post-meta {
   font-size: 0.75rem;
-  text-align: right;
   color: #666;
+  display: flex;
+  flex-wrap: wrap; /* allow line breaks on overflow */
+  align-items: center;
+  gap: 6px;
+  word-break: break-word;
 }
 
+/* =====================================================
+   POST CARD
+===================================================== */
 .post {
+  position: relative;
   background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px 12px;
   margin-bottom: 1rem;
-
+  word-wrap: break-word;
   overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
+/* =====================================================
+   POST ACTIONS
+===================================================== */
+.post-actions {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap; /* wrap buttons if too long */
+  gap: 6px;
+}
 
+/* ACTION BUTTON BASE */
+.reply-btn,
+.delete-btn,
+.undo-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+/* Reply */
+.reply-btn { color: white; }
+.reply-btn:hover { color: #fff; }
+
+/* Delete */
+.delete-btn { color: white;
+background-color: #d32f2f; }
+.delete-btn:hover { background: #d32f2f; color: #fff; }
+
+/* Undo */
+.undo-delete-btn {
+  background: #ff9800;
+  color: white;
+  padding: 3px 6px;
+  font-size: 0.75rem;
+  transition: background 0.2s ease;
+}
+.undo-delete-btn:hover { background: #f57c00; }
+
+/* =====================================================
+   DELETE CONFIRM UI
+===================================================== */
+.delete-ui {
+  position: absolute;
+  right: 8px;
+  top: calc(100% + 6px);
+  width: 220px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  z-index: 20;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.delete-ui.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.delete-ui textarea {
+  width: 100%;
+  font-size: 0.75rem;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap; /* wrap buttons if needed */
+}
+
+.delete-actions button {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
 
 /* =====================================================
    THREAD LIST
@@ -108,56 +204,30 @@ body {
   background: #f0f2f5;
 }
 
-.threadTitle {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.threadTitle a {
-  text-decoration: none;
-  color: #1976d2;
-}
-
-.threadTitle a:hover {
-  text-decoration: underline;
-}
-
-.authroname {
-  font-size: 0.75rem;
-  color: #666;
-}
+.threadTitle { margin: 0; font-size: 1rem; color: #1976d2; }
+.threadTitle:hover { text-decoration: underline; }
+.authroname { font-size: 0.75rem; color: #666; }
 
 /* =====================================================
-   ROLE STYLES
+   ROLE BADGES
 ===================================================== */
-.admin-role {
-  background: #f5c542;
-  color: #000;
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-}
-
-.moderator-role {
-  background: #4da6a6;
-  color: #fff;
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-}
-
+.admin-role,
+.moderator-role,
 .guest-role {
-  color: #4c6ef5;
+  padding: 1px 5px;
+  border-radius: 4px;
   font-size: 0.7rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.small-message-font {
-  font-size: 0.85rem;
-  font-style: italic;
-}
+.admin-role { background: #f5c542; color: #000; }
+.moderator-role { background: #4da6a6; color: #fff; }
+.guest-role { color: #4c6ef5; }
 
 /* =====================================================
-   FORMS / INPUTS / TEXTAREAS
+   FORMS
 ===================================================== */
 input[type="text"],
 textarea {
@@ -166,15 +236,11 @@ textarea {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
-  background: #fff;
 }
 
-textarea {
-  resize: vertical;
-  min-height: 80px;
-}
+textarea { min-height: 80px; resize: vertical; }
 
-input[type="text"]:focus,
+input:focus,
 textarea:focus {
   outline: none;
   border-color: #1976d2;
@@ -182,7 +248,7 @@ textarea:focus {
 }
 
 /* =====================================================
-   BUTTONS (INCLUDING CREATE THREAD)
+   PRIMARY BUTTONS
 ===================================================== */
 button,
 input[type="submit"] {
@@ -193,54 +259,21 @@ input[type="submit"] {
   color: white;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
 }
 
 button:hover,
-input[type="submit"]:hover {
-  background: #155a9c;
-}
-
-button:disabled,
-input[type="submit"]:disabled {
-  background: #cfd4da;
-  border-color: #cfd4da;
-  cursor: not-allowed;
-}
-
-/* Reply button */
-.reply-btn {
-  margin-left: 6px;
-  font-size: 0.75rem;
-  padding: 4px 8px;
-}
+input[type="submit"]:hover { background: #155a9c; }
+button:disabled { background: #cfd4da; border-color: #cfd4da; }
 
 /* =====================================================
-   CREATE THREAD / POST BOXES
-===================================================== */
-.create-thread-box,
-.create-post-box {
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 1.5rem;
-}
-
-.create-thread-box h3,
-.create-post-box h3 {
-  margin-top: 0;
-}
-
-/* =====================================================
-   POST CONTENT FORMATTING
+   CONTENT FORMATTING
 ===================================================== */
 blockquote {
   border-left: 4px solid #1976d2;
   background: #f1f5fb;
   padding: 8px 12px;
   margin: 10px 0;
-  color: #333;
   font-style: italic;
 }
 
@@ -260,88 +293,24 @@ pre {
   margin: 10px 0;
 }
 
-pre code {
-  background: none;
-  padding: 0;
-}
-
-mark {
-  background: #fff3bf;
-  padding: 2px 4px;
-  border-radius: 3px;
-}
-
-.spoiler {
-  background: #ccc;
-  color: transparent;
-  cursor: pointer;
-  border-radius: 3px;
-  padding: 0 4px;
-}
-
-.spoiler:hover {
-  color: #000;
-}
-
-.reply-link {
-  color: #1976d2;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.post-highlight {
-  background: #e3f2fd;
-  border-color: #1976d2;
-  transition: background 0.3s ease;
-}
-
-/* =====================================================
-   NAV HELPERS
-===================================================== */
-.back-to-forum {
-  display: inline-block;
-  margin-bottom: 10px;
-  color: #1976d2;
-  text-decoration: none;
-}
-
-.back-to-forum:hover {
-  text-decoration: underline;
-}
+pre code { background: none; padding: 0; }
 
 /* =====================================================
    UTILS
 ===================================================== */
-.hidden {
-  display: none;
-}
-
-
+.hidden { display: none; }
+.post-highlight { background: #e3f2fd; border-color: #1976d2; }
 
 /* =====================================================
-   MOBILE VIEW (TABLETS & PHONES)
+   MOBILE / RESPONSIVE
 ===================================================== */
 @media (max-width: 768px) {
+  .forum-wrapper { padding: 0 1rem; }
 
-  /* Reduce aggressive horizontal padding */
-  .forum-wrapper {
-    padding: 0 1rem;
-  }
+  .forum-layout,
+  .thread-view { flex-direction: column; }
 
-  /* Stack layout instead of side-by-side */
-  .forum-layout {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  /* Thread view: force vertical flow */
-  .thread-view {
-    flex-direction: column;
-  }
-
-  /* Thread list moves to top */
   .thread-view .thread-list-container {
-    flex: none;
     width: 100%;
     padding-right: 0;
     border-right: none;
@@ -349,39 +318,34 @@ mark {
     margin-bottom: 1rem;
   }
 
-  /* Thread content below list */
-  .thread-container {
+  .post-meta,
+  .post-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .post-actions button,
+  .delete-actions button,
+  .undo-delete-btn {
     width: 100%;
+    margin-left: 0;
   }
 
-  /* Make thread titles slightly more touch-friendly */
-  .threadTitle {
-    font-size: 1.05rem;
-  }
-
-  /* Metadata alignment feels better on mobile */
-  .thread-meta,
-  .post-meta {
-    text-align: left;
-    margin-top: 4px;
-  }
-
-  /* Buttons span full width when needed */
-  button,
-  input[type="submit"] {
-    width: 100%;
-  }
-
-  /* Reply buttons stay compact */
-  .reply-btn {
-    width: auto;
-    float:right;
-  }
+  .delete-ui { width: 100%; right: 0; top: calc(100% + 4px); }
 }
 
+.post.deleted .post-content {
+    font-style: italic;
+    color: #999;
+}
 
-pre,
-code {
-  max-width: 100%;
-  overflow-x: auto;
+.reply-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.meta-spawn {
+  width: 100%;
+  position: relative;
+  right: 0;
 }
