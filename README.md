@@ -24,3 +24,7 @@ And this will change it to the local copy of `db.json`instead of the render app 
 
 
 If you are running this from the github page link then the constants.js file needs to use the render app deployment for the database or provide a link for the json-server that provides the open ended API to allow querying the db.json endpoints. And you can change to that API URI using `set-server.sh` file.
+
+
+## Updates
+- [202512231419]: Added the delete and undo button logic 
