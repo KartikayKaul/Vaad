@@ -19,13 +19,14 @@ body {
 /* =====================================================
    LINK NORMALIZATION
 ===================================================== */
-/* a {
-  color: inherit;
+a.back-to-forum {
+  color: #1976d2;
+  font-weight: bold;
 }
 
-a:visited { color: inherit; }
-a:hover { color: inherit; } */
-a:active { color: cornflowerblue;}
+a.back-to-forum:hover { color: cornflowerblue; } 
+a.back-to-forum:active { color: cornflowerblue; }
+
 /* =====================================================
    WRAPPER
 ===================================================== */
@@ -40,7 +41,7 @@ a:active { color: cornflowerblue;}
   display: flex;
   gap: 1.5rem;
   width: 100%;
-  flex-wrap: wrap; /* allow wrapping on small screens */
+  flex-wrap: wrap;
 }
 
 .forum-view { flex-direction: column; }
@@ -73,10 +74,15 @@ a:active { color: cornflowerblue;}
   font-size: 0.75rem;
   color: #666;
   display: flex;
-  flex-wrap: wrap; /* allow line breaks on overflow */
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   word-break: break-word;
+}
+
+/* 🔧 IMPORTANT FIX */
+.post-meta {
+  position: static; /* prevents post-id-box anchoring here */
 }
 
 /* =====================================================
@@ -87,7 +93,7 @@ a:active { color: cornflowerblue;}
   background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 6px;
-  padding: 10px 12px;
+  padding: 28px 12px 10px; /* 🔧 space for post-id-box */
   margin-bottom: 1rem;
   word-wrap: break-word;
   overflow-wrap: anywhere;
@@ -99,7 +105,7 @@ a:active { color: cornflowerblue;}
 .post-actions {
   margin-left: auto;
   display: flex;
-  flex-wrap: wrap; /* wrap buttons if too long */
+  flex-wrap: wrap;
   gap: 6px;
 }
 
@@ -108,7 +114,8 @@ a:active { color: cornflowerblue;}
 .delete-btn,
 .undo-delete-btn {
   display: inline-flex;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
   font-size: 0.75rem;
   padding: 3px 6px;
   border-radius: 4px;
@@ -123,8 +130,10 @@ a:active { color: cornflowerblue;}
 .reply-btn:hover { color: #fff; }
 
 /* Delete */
-.delete-btn { color: white;
-background-color: #d32f2f; }
+.delete-btn {
+  color: white;
+  background-color: #d32f2f;
+}
 .delete-btn:hover { background: #d32f2f; color: #fff; }
 
 /* Undo */
@@ -177,7 +186,7 @@ background-color: #d32f2f; }
   justify-content: flex-end;
   gap: 6px;
   margin-top: 6px;
-  flex-wrap: wrap; /* wrap buttons if needed */
+  flex-wrap: wrap;
 }
 
 .delete-actions button {
@@ -301,6 +310,55 @@ pre code { background: none; padding: 0; }
 .hidden { display: none; }
 .post-highlight { background: #e3f2fd; border-color: #1976d2; }
 
+.post.deleted .post-content {
+  font-style: italic;
+  color: #999;
+}
+
+.reply-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.meta-spawn {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* =====================================================
+   POST ID BOX
+===================================================== */
+.post-id-box {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  z-index: 5;
+
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+
+  background: #1976d2;
+  border: 1px solid #777;
+  color: #ffffff;
+
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.post-id-box:hover {
+  background: #444;
+  color: #fff;
+  border-color: #444;
+}
+
+.post-id-box.copied {
+  background: #28a745;
+  color: #fff;
+  border-color: #28a745;
+}
+
 /* =====================================================
    MOBILE / RESPONSIVE
 ===================================================== */
@@ -327,25 +385,25 @@ pre code { background: none; padding: 0; }
   .post-actions button,
   .delete-actions button,
   .undo-delete-btn {
-    width: 100%;
     margin-left: 0;
   }
 
-  .delete-ui { width: 100%; right: 0; top: calc(100% + 4px); }
+  .delete-ui {
+    right: 0;
+    top: calc(100% + 4px);
+  }
 }
 
-.post.deleted .post-content {
-    font-style: italic;
-    color: #999;
-}
-
-.reply-btn.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.meta-spawn {
-  width: 100%;
-  position: relative;
-  right: 0;
+.copy-toast {
+  position: absolute;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 999;
+  opacity: 0.9;
+  pointer-events: none;
+  white-space: nowrap;
 }

@@ -27,6 +27,24 @@ const autoPostId = new URLSearchParams(window.location.search).get("postId");
 /* ======================================================
    UTIL FUNCTIONS
 ====================================================== */
+function showCopyToast(text, anchorEl) {
+ 
+  document.querySelectorAll(".copy-toast").forEach(t => t.remove());
+
+  const toast = document.createElement("div");
+  toast.className = "copy-toast";
+  toast.textContent = text;
+
+  document.body.appendChild(toast);
+
+  const rect = anchorEl.getBoundingClientRect();
+  toast.style.top = `${rect.top - 22 + window.scrollY}px`;
+  toast.style.left = `${rect.left + rect.width / 2}px`;
+
+  setTimeout(() => toast.remove(), 900);
+}
+
+
 function buildMetaSpawn(p, author) {
     const isDeleted = p.deletionLog?.deleted;
     const lastDeletion = p.deletionLog?.log?.[0];
@@ -515,7 +533,13 @@ async function reloadPosts(threadId) {
         return `
           <div class="post" data-post-id="${p.id}" id="post-${p.id}">
             <div class="post-content">${isDeleted ? "<small><i>Deleted</i></small>" : parsePostContent(p.content)}</div>
-            <p class="post-meta">
+            <div class="post-meta">
+                 <div
+                    class="post-id-box"
+                    data-post-id="${p.id}"
+                    title="Click to copy Post ID">
+                    ⓘ
+                </div>
                 <span class="meta-spawn">
                     ${buildMetaSpawn(p, author)}
                 </span>
@@ -550,13 +574,15 @@ async function reloadPosts(threadId) {
                     }
                 </span>
 
-            </p>
+            </div>
             
           </div>
         `;
     }).join("");
 
-    document.querySelector(".thread-posts").innerHTML = postsHTML;
+    let threadPosts = document.querySelector(".thread-posts");
+    threadPosts.innerHTML = postsHTML;
+
 
     // Add Undo buttons for deleted posts
     
@@ -613,7 +639,7 @@ async function reloadPosts(threadId) {
     // event delegation handler is added here
     const postsContainer = document.querySelector(".thread-posts");
     if (!postsContainer.dataset.listenerAdded) {
-        postsContainer.addEventListener("click", (e) => {
+        postsContainer.addEventListener("click", async (e) => {
             if (e.target.classList.contains("reply-btn")) {
                 const postId = e.target.dataset.postId;
                 const username = e.target.dataset.username;
@@ -636,6 +662,22 @@ async function reloadPosts(threadId) {
                 }
             }
 
+            if(e.target.classList.contains("post-id-box")){
+                const infoBox = e.target.closest(".post-id-box");
+                if(!infoBox) return;
+
+                const postId = infoBox.dataset.postId;
+                if(!postId) return;
+                try {
+                    navigator.clipboard.writeText(postId);
+                    infoBox.classList.add("copied");
+                    setTimeout(() => infoBox.classList.remove("copied"), 800);
+                    
+                    showCopyToast("Post ID copied", infoBox);
+                } catch(err) {
+                    console.error("Failed to copy Post ID");
+                }
+            };
         });
         postsContainer.dataset.listenerAdded = "true";
     }
