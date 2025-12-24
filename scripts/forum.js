@@ -23,7 +23,6 @@ const forumId = new URLSearchParams(window.location.search).get("forumId");
 const autoThreadId = new URLSearchParams(window.location.search).get("threadId");
 const autoPostId = new URLSearchParams(window.location.search).get("postId");
 
-console.log(autoThreadId, autoPostId);
 
 /* ======================================================
    UTIL FUNCTIONS
@@ -31,7 +30,6 @@ console.log(autoThreadId, autoPostId);
 function buildMetaSpawn(p, author) {
     const isDeleted = p.deletionLog?.deleted;
     const lastDeletion = p.deletionLog?.log?.[0];
-
     if (!isDeleted || !lastDeletion) {
     return `
       Posted ${timeAgo(p.createdAt)} by ${author.username}
@@ -39,26 +37,26 @@ function buildMetaSpawn(p, author) {
     `;
   }
 
-  const isSelfDelete = lastDeletion.deletedBy;
-  const deleterRole = constants.__MODS__.filter(y => y.id == lastDeletion.deleterId)[0].role || "self";
+  const isSelfDelete = lastDeletion.deletedBy == "self";
+  const deleterRole = (isSelfDelete)?author.role:constants.__MODS__.filter(y => y.id == lastDeletion.deleterId)[0]?.role;
   const hasReason = isSelfDelete !== "self" && lastDeletion.reason;
-
+  
   return `
-    Deleted ${timeAgo(lastDeletion.deletedOn)} by ${(deleterRole == "self")?author.username:constants.__MODS__.filter(y => y.id == lastDeletion.deleterId)[0].username}
-    <span class="${deleterRole}-role">[${isSelfDelete || deleterRole}]</span>
+    Deleted ${timeAgo(lastDeletion.deletedOn)} by ${(isSelfDelete)?author.username:constants.__MODS__.filter(y => y.id == lastDeletion.deleterId)[0].username}
+    <span class="${deleterRole}-role">[${(isSelfDelete)?"self":deleterRole}]</span>
     ${
       hasReason
         ? `
           <span
             class="delete-reason-indicator"
             title="${lastDeletion.reason.replace(/"/g, "&quot;")}">
-            ✉reason
+            [✉] Reason
           </span>
         `
         : ""
     }
 
-    <small><br/>[was created by ${author.username} around ${timeAgo(p.createdAt)}]</small>
+    <small><br/>[was created by ${author.username} ${timeAgo(p.createdAt)}]</small>
   `;
 }
 
