@@ -104,6 +104,7 @@ function renderThreads() {
     const slice = myThreads.slice(threadsShown, threadsShown + THREADS_PAGE_SIZE);
     slice.forEach(thread => {
         const li = document.createElement("li");
+        li.setAttribute("data-aos", "zoom-in-left")
         li.className = "thread-item";
         li.innerHTML = `
             <span class="thread-title">${thread.title}</span>
@@ -131,6 +132,7 @@ function renderPosts() {
         if(!thread) return;
 
         const li = document.createElement("li");
+        li.setAttribute("data-aos", "zoom-in-left");
         li.className = "post-item";
         li.innerHTML = `
             <span class="post-content">${post.content.slice(0, 80)}...</span>

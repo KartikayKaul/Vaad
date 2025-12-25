@@ -38,6 +38,7 @@ function renderForumCards(data) {
     data.forEach(forum => {
         const card = document.createElement('div');
         card.className = 'forum-card';
+        card.setAttribute("data-aos", "fade-up");
         card.innerHTML = `
             <h3>${forum.name}</h3>
             <p>${forum.description || ''}</p>

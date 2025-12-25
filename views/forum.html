@@ -7,6 +7,7 @@
     <link href="../styles/root.css" rel="stylesheet" />
     <link href="../styles/forum.css" rel="stylesheet" />
     <link href="../styles/navbar.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar"></nav>
@@ -49,5 +50,13 @@
 
     </footer>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 400, // animation duration in ms
+        easing: 'ease-in-out', // easing function
+        once: true, // animation happens only once when scrolled into view
+    });
+</script>
 <script type="module" src="../scripts/forum.js"></script>
 </html>

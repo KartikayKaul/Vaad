@@ -15,7 +15,7 @@
  * USER MENTIONS
  *  - {{username}}  → links to profile
  *
- * EMOJIS
+ * EMOJIS - addding emojis or u can use built in OS emoji picker
  *  - { :) }  → 🙂
  *  - { :( }  → 🙁
  *  - { :D }  → 😄
@@ -25,13 +25,14 @@
  *
  * REPLIES
  *  - >>>username[post:123] → scroll link to post #123
+ *  - {{username}} -> mention a user (adds a link to their profile)
  *
  * ESCAPING (disable formatting)
  *  - \* \_ \~ \{ \} \[ \]
  *    Example: \*not bold\*
  *
  * CODE 
- * -  ```[lang]python
+ * -  ```
  *           def main():
  *                  print("hello");
  *    ```

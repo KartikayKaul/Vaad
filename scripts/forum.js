@@ -27,6 +27,78 @@ const autoPostId = new URLSearchParams(window.location.search).get("postId");
 /* ======================================================
    UTIL FUNCTIONS
 ====================================================== */
+function insertFormattingAtCursor(textarea, code) {
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    const selected = textarea.value.substring(start, end) || code;
+    const formatted = code.includes(selected) ? code : code.replace(/Text|Code|Spoiler|Link Text|Blockquote|username/, selected);
+
+    textarea.value =
+        textarea.value.substring(0, start) +
+        formatted +
+        textarea.value.substring(end);
+
+    // Find placeholder region inside formatted text
+    const placeholderMatch = formatted.match(/Text|Code|Spoiler|Link Text|Blockquote|username/);
+    if (placeholderMatch) {
+        const placeholderStart = start + formatted.indexOf(placeholderMatch[0]);
+        const placeholderEnd = placeholderStart + placeholderMatch[0].length;
+        textarea.selectionStart = placeholderStart;
+        textarea.selectionEnd = placeholderEnd;
+    } else {
+        textarea.selectionStart = textarea.selectionEnd = start + formatted.length;
+    }
+
+    textarea.focus();
+}
+
+function createFormattingToolbar(targetTextarea) {
+    const toolbar = document.createElement("div");
+    toolbar.className = "formatting-toolbar hidden";
+
+    const buttons = [
+        { label: "B", code: "**Text**" },
+        { label: "I", code: "__Text__" },
+        { label: "S", code: "~Text~" },
+        { label: "Mark", code: "==Text==" },
+
+        { label: "`", code: "`Code`" },
+        { label: "Block", code: "```\nCode\n```" },
+
+        { label: "H2", code: "## Heading" },
+        { label: "H3", code: "### Subheading" },
+
+        { label: "Quote", code: "> Blockquote" },
+
+        { label: "UL", code: "- List item" },
+        { label: "OL", code: "1. List item" },
+
+        { label: "HR", code: "\n---\n" },
+
+        { label: "Center", code: "::center::Text::center::" },
+
+        { label: "Link", code: "[[https://example.com|Link Text]]" },
+        { label: "@", code: "{{username}}" }
+    ];
+
+    buttons.forEach(b => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = b.label;
+        btn.title = b.code;
+        btn.addEventListener("click", () => {
+            targetTextarea.classList.toggle("txtara-border-show")
+            insertFormattingAtCursor(targetTextarea, b.code);
+        });
+        toolbar.appendChild(btn);
+    });
+
+    return toolbar;
+}
+
 function showCopyToast(text, anchorEl) {
  
   document.querySelectorAll(".copy-toast").forEach(t => t.remove());
@@ -43,7 +115,6 @@ function showCopyToast(text, anchorEl) {
 
   setTimeout(() => toast.remove(), 900);
 }
-
 
 function buildMetaSpawn(p, author) {
     const isDeleted = p.deletionLog?.deleted;
@@ -321,7 +392,54 @@ function parsePostContent(raw) {
     content = content.replace(/\n/g, "<br/>");
 
     /* ===============================
-        13. RESTORE ESCAPED TOKENS
+        13. HEADINGS
+    =============================== */
+    content = content.replace(
+        /(^|\n)### (.*)/g,
+        `$1<h3>$2</h3>`
+    );
+
+    content = content.replace(
+        /(^|\n)## (.*)/g,
+        `$1<h2>$2</h2>`
+    );
+
+    /* ===============================
+        14. HORIZONTAL RULE
+    =============================== */
+    content = content.replace(
+        /(^|\n)---(\n|$)/g,
+        `$1<hr/>$2`
+    );
+
+    /* ===============================
+        15. LISTS
+    =============================== */
+    content = content.replace(
+        /(^|\n)(?:- |\* )(.*)/g,
+        `$1<ul><li>$2</li></ul>`
+    );
+
+    content = content.replace(
+        /(^|\n)(\d+)\. (.*)/g,
+        `$1<ol><li>$3</li></ol>`
+    );
+
+    /* ===============================
+        16. ALIGNMENT
+    =============================== */
+    content = content.replace(
+        /::center::([\s\S]*?)::center::/g,
+        `<div style="text-align:center">$1</div>`
+    );
+
+    content = content.replace(
+        /::right::([\s\S]*?)::right::/g,
+        `<div style="text-align:right">$1</div>`
+    );
+
+    /* ===============================
+        17. RESTORE ESCAPED TOKENS
     =============================== */
     for (const k in ESC) {
         content = content.replaceAll(ESC[k], k.slice(1));
@@ -531,7 +649,7 @@ async function reloadPosts(threadId) {
         const isDeleted = p.deletionLog?.deleted;
         // const lastDeletion = p.deletionLog?.log?.[0];
         return `
-          <div class="post" data-post-id="${p.id}" id="post-${p.id}">
+          <div class="post"  data-aos="fade-up" data-post-id="${p.id}" id="post-${p.id}">
             <div class="post-content">${isDeleted ? "<small><i>Deleted</i></small>" : parsePostContent(p.content)}</div>
             <div class="post-meta">
                  <div
@@ -723,6 +841,7 @@ async function loadThread(threadId) {
 
 function injectPostCreator(threadId) {
     const postBox = document.createElement("div");
+    postBox.setAttribute("data-aos", "fade-left")
     postBox.classList.add("create-post-box");
 
     postBox.innerHTML = `
@@ -739,6 +858,21 @@ function injectPostCreator(threadId) {
 
     const form = postBox.querySelector("form");
     const textarea = form.querySelector("textarea");
+
+    //injecting toolbar above textarea00
+    const toolbar = createFormattingToolbar(textarea);
+    postBox.insertBefore(toolbar, form);
+
+    const guideBtn = document.createElement("button");
+    guideBtn.type = "button";
+    guideBtn.className = "format-guide-btn";
+    guideBtn.textContent = "Formatting";
+    guideBtn.addEventListener("click", () => {
+        toolbar.classList.toggle("hidden");
+    });
+
+    // placing next to <h3> text
+    postBox.querySelector("h3").appendChild(guideBtn);
 
     // adding tabspace support into textarea
     textarea.addEventListener("keydown", (e) => {
@@ -794,10 +928,25 @@ function injectCreateThreadForm() {
     const form = document.querySelector("#createThreadForm");
     if (!form) return;
 
+    // inject formatting toolbar above textarea
+    const toolbar = createFormattingToolbar(form.querySelector("textarea"));
+    form.querySelector("textarea").before(toolbar);
+
+    const guideBtn = document.createElement("button");
+    guideBtn.type = "button";
+    guideBtn.className = "format-guide-btn";
+    guideBtn.textContent = "Formatting";
+    guideBtn.addEventListener("click", () => {
+        toolbar.classList.toggle("hidden");
+    });
+
     const h3 = document.querySelector(".create-thread-box h3");
     h3.innerHTML += ` <i>as <span class="small-message-font ${constants.USER_CONFIGS.snapshot.role}-role">${constants.USER_CONFIGS.snapshot.username}</span></i>`
-    const errorBox = form.querySelector(".error");
+    
+    h3.appendChild(guideBtn);
 
+    const errorBox = form.querySelector(".error");
+    
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 

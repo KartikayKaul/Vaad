@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../styles/root.css" />
     <link rel="stylesheet" href="../styles/navbar.css"/>
     <link rel="stylesheet" href="../styles/myThreads.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar"></nav>
@@ -28,6 +29,14 @@
         </div>
 
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 500, 
+            easing: 'ease-in-out', 
+            once: true, 
+        });
+    </script>
     <script type="module" src="../scripts/myThreads.js"></script>
 </body>
 </html>
