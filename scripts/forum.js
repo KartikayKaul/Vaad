@@ -153,6 +153,7 @@ function injectDeleteUI(postNode, postId) {
   // Prevent duplicate injection
   if (postNode.querySelector(".delete-ui")) return;
 
+
   const user = constants.USER_CONFIGS.snapshot;
   const requiresReason = (user.role === "moderator" || user.role === "admin") &&
                           user.username !== postNode.querySelector(".reply-btn").dataset.username;
@@ -176,11 +177,17 @@ function injectDeleteUI(postNode, postId) {
   `;
 
   postNode.append(ui);
+  
+  postNode.classList.add("has-delete-ui");
+
   setTimeout(() => ui.classList.add("show"), 10);
 
   const errorBox = ui.querySelector(".error");
 
-  ui.querySelector(".cancel-delete").onclick = () => ui.remove();
+  ui.querySelector(".cancel-delete").onclick = () => {
+    postNode.classList.remove("has-delete-ui");
+    ui.remove();
+  };
 
   ui.querySelector(".confirm-delete").onclick = async () => {
     const reason = requiresReason
@@ -193,6 +200,7 @@ function injectDeleteUI(postNode, postId) {
     }
 
     await deletePost(postId, reason);
+    postNode.classList.remove("has-delete-ui");
   };
 }
 
@@ -777,6 +785,10 @@ async function reloadPosts(threadId) {
                     ui.classList.toggle("show");
                 } else {
                     injectDeleteUI(postNode, postId);
+                    postNode.querySelector(".delete-ui").scrollIntoView(
+                        {behavior: 'smooth',
+                        block: 'center',
+                        inline: 'nearest'});
                 }
             }
 

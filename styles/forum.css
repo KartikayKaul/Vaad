@@ -78,6 +78,7 @@ a.back-to-forum:active { color: cornflowerblue; }
   align-items: center;
   gap: 6px;
   word-break: break-word;
+  
 }
 
 /* 🔧 IMPORTANT FIX */
@@ -97,6 +98,7 @@ a.back-to-forum:active { color: cornflowerblue; }
   margin-bottom: 1rem;
   word-wrap: break-word;
   overflow-wrap: anywhere;
+  overflow: visible;
 }
 
 /* =====================================================
@@ -484,4 +486,8 @@ pre code { background: none; padding: 0; }
 .post-content li {
   margin: 4px 0;
   line-height: 1.4;
+}
+
+.post.has-delete-ui {
+  z-index: 50;
 }

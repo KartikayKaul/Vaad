@@ -1,6 +1,7 @@
 # Vaad
 This is a front-end project with minimal backend API stuff happening. The website is a forum bases website inspired by forum sites like Reddit or 4chan.org.
 
+One good thing about making posts in Vaad is that posters can make use of markdown like style formatting to 
 
 ## Notes
 The site is currently hosted on github pages. You can visit it [here](https://kartikaykaul.github.io/Vaad/).
@@ -27,4 +28,9 @@ If you are running this from the github page link then the constants.js file nee
 
 
 ## Updates
+- [202512250434]: 
+    - Added some AOS animations. 
+    - Fixed some code and in previous commits have added copy post id box on the post content element.This allows user to get the post id to formulate reply in chat using the special text commands. 
+    - Text formatting commands have been added as a UI toolbar where a post can be created with.
+    - maybe I will add z-index to createPostBox to make it visible throughout and fix it at bottom and add a modal toggle to flip it on or off.
 - [202512231419]: Added the delete and undo button logic 
