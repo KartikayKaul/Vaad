@@ -286,8 +286,7 @@ function parsePostContent(raw) {
     }
 
     /* ===============================
-        2. CODE BLOCKS ```code```
-        (must be first)
+        2. CODE BLOCKS
     =============================== */
     content = content.replace(
         /```([\s\S]*?)```/g,
@@ -295,15 +294,12 @@ function parsePostContent(raw) {
     );
 
     /* ===============================
-        3. INLINE CODE `code`
+        3. INLINE CODE
     =============================== */
-    content = content.replace(
-        /`([^`]+)`/g,
-        "<code>$1</code>"
-    );
+    content = content.replace(/`([^`]+)`/g, "<code>$1</code>");
 
     /* ===============================
-        4. REPLY LINKS >>>user[post:123]
+        4. REPLY LINKS
     =============================== */
     content = content.replace(
         />>>[\w-]+\[post:(\d+)\]/g,
@@ -313,7 +309,6 @@ function parsePostContent(raw) {
 
     /* ===============================
         5. BLOCKQUOTES
-        > quoted text
     =============================== */
     content = content.replace(
         /(^|\n)>(?!>|\s*>)(.*)/g,
@@ -321,7 +316,51 @@ function parsePostContent(raw) {
     );
 
     /* ===============================
-        6. TEXT FORMATTING
+        6. HEADINGS
+    =============================== */
+    content = content.replace(/(^|\n)### (.*)/g, `$1<h3>$2</h3>`);
+    content = content.replace(/(^|\n)## (.*)/g, `$1<h2>$2</h2>`);
+
+    /* ===============================
+        7. HORIZONTAL RULE
+    =============================== */
+    content = content.replace(
+        /(^|\n)---(?=\n|$)/g,
+        `$1<hr/>`
+    );
+
+    /* ===============================
+        8. LISTS  //// just fixed this part
+    =============================== */
+
+    // Unordered
+    content = content.replace(
+        /(?:^|\n{2,})((?:- |\* ).+(?:\n(?:- |\* ).+)*)/g,
+        (_, block) => {
+            const items = block
+                .trim()
+                .split(/\n/)
+                .map(line => `<li>${line.replace(/^(- |\* )/, "")}</li>`)
+                .join("");
+            return `\n<ul>${items}</ul>`;
+        }
+    );
+
+    // Ordered
+    content = content.replace(
+        /(?:^|\n)((?:\d+\. .+(?:\n\d+\. .+)*)+)/g,
+        (_, block) => {
+            const items = block
+                .trim()
+                .split(/\n/)
+                .map(line => `<li>${line.replace(/^\d+\. /, "")}</li>`)
+                .join("");
+            return `\n<ol>${items}</ol>`;
+        }
+    );  
+
+    /* ===============================
+        9. TEXT FORMATTING
     =============================== */
     content = content
         .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
@@ -332,10 +371,7 @@ function parsePostContent(raw) {
         .replace(/==(.*?)==/g, "<mark>$1</mark>");
 
     /* ===============================
-        7. COLOR HIGHLIGHT
-        @@color:text@@
-        @@#ff0:text@@
-        @@rgb(255,0,0):text@@
+        10. COLOR HIGHLIGHT
     =============================== */
     content = content.replace(
         /@@([^:]+):([\s\S]+?)@@/g,
@@ -344,20 +380,19 @@ function parsePostContent(raw) {
     );
 
     /* ===============================
-        8. LINKS
+        11. LINKS
     =============================== */
     content = content.replace(
         /\[\[(https?:\/\/[^\|\]]+)\s*\|\s*(.*?)\]\]/g,
         `<a href="$1" target="_blank" rel="noopener">$2</a>`
     );
-
     content = content.replace(
         /\[\[(https?:\/\/[^\]]+)\]\]/g,
         `<a href="$1" target="_blank" rel="noopener">$1</a>`
     );
 
     /* ===============================
-        9. USER MENTIONS {{username}}
+        12. USER MENTIONS
     =============================== */
     content = content.replace(
         /\{\{([a-zA-Z0-9_-]+)\}\}/g,
@@ -365,7 +400,7 @@ function parsePostContent(raw) {
     );
 
     /* ===============================
-        10. SPOILERS ||text||
+        13. SPOILERS
     =============================== */
     content = content.replace(
         /\|\|(.*?)\|\|/g,
@@ -373,7 +408,7 @@ function parsePostContent(raw) {
     );
 
     /* ===============================
-        11. EMOJIS { :) }
+        14. EMOJIS
     =============================== */
     const emojis = {
         ":)": "🙂",
@@ -393,61 +428,13 @@ function parsePostContent(raw) {
         (_, k) => emojis[k]
     );
 
-
     /* ===============================
-        12. LINE BREAKS
+        15. LINE BREAKS (LAST!)
     =============================== */
     content = content.replace(/\n/g, "<br/>");
 
     /* ===============================
-        13. HEADINGS
-    =============================== */
-    content = content.replace(
-        /(^|\n)### (.*)/g,
-        `$1<h3>$2</h3>`
-    );
-
-    content = content.replace(
-        /(^|\n)## (.*)/g,
-        `$1<h2>$2</h2>`
-    );
-
-    /* ===============================
-        14. HORIZONTAL RULE
-    =============================== */
-    content = content.replace(
-        /(^|\n)---(\n|$)/g,
-        `$1<hr/>$2`
-    );
-
-    /* ===============================
-        15. LISTS
-    =============================== */
-    content = content.replace(
-        /(^|\n)(?:- |\* )(.*)/g,
-        `$1<ul><li>$2</li></ul>`
-    );
-
-    content = content.replace(
-        /(^|\n)(\d+)\. (.*)/g,
-        `$1<ol><li>$3</li></ol>`
-    );
-
-    /* ===============================
-        16. ALIGNMENT
-    =============================== */
-    content = content.replace(
-        /::center::([\s\S]*?)::center::/g,
-        `<div style="text-align:center">$1</div>`
-    );
-
-    content = content.replace(
-        /::right::([\s\S]*?)::right::/g,
-        `<div style="text-align:right">$1</div>`
-    );
-
-    /* ===============================
-        17. RESTORE ESCAPED TOKENS
+        16. RESTORE ESCAPED TOKENS
     =============================== */
     for (const k in ESC) {
         content = content.replaceAll(ESC[k], k.slice(1));
@@ -455,6 +442,7 @@ function parsePostContent(raw) {
 
     return content;
 }
+
 
 
 
